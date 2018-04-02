@@ -1,0 +1,20 @@
+{
+  "port": 3032,
+  "mongoUrl": "mongodb://localhost:27017",
+  "sendMail": {
+    "subject": "Сообщение с сайта",
+    "finalDestination": "DESTINATION@MAIL",
+    "smtp": {
+      "host": "smtp.gmail.com",
+      "port": 465,
+      "secure": true,
+      "auth": {
+        "user": "TRANSPORTER@MAIL",
+        "pass": "PASSWORD"
+      },
+      "tls": {
+        "rejectUnauthorized": false
+      }
+    }
+  }
+}

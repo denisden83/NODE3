@@ -1,5 +1,6 @@
 const MongoClient = require('mongodb').MongoClient;
-const url = 'mongodb://localhost:27017';
+const config = require('../config');
+const url = config.get('mongoUrl');
 
 module.exports.getStatistics = (cb) => {
     MongoClient.connect(url, (err, client) => {
@@ -37,6 +38,3 @@ module.exports.addStatistics = (objToUpdate, cb) => {
             });
     });
 };
-
-
-

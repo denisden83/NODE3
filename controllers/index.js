@@ -1,4 +1,29 @@
 const ModelIndex = require('../models/index');
+const nodemailer = require('nodemailer');
+const config = require('../config');
+
+module.exports.sendEmail = (req, res, next) => {
+    if (!req.body.name || !req.body.email || !req.body.message) {
+        return res.json({msg: 'Все поля нужно заполнить', status: 'Error'});
+    }
+    const transporter = nodemailer.createTransport(config.get('sendMail:smtp'));
+    const mailOptions = {
+      from: `"${req.body.name}" <${req.body.email}>`,
+      to: config.get('sendMail:finalDestination'),
+      subject: config.get('sendMail:subject'),
+      text: req.body.message.trim().slice(0, 500) +
+      `\n Отправлено с: <${req.body.email}>`
+      // html: req.body.message.trim().slice(0, 500) +
+      // '<br /> Отправлено с: &lt' + req.body.email + '&gt'
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+       if (error) {
+           return res.json({msg: `При отправку письма произошла ошибка: ${error}`, status: 'Error'});
+       }
+        console.log(info);
+        res.json({msg: `Письмо успешно отправлено`, status: 'Ok'});
+    });
+};
 
 module.exports.showPageIndex = (req, res, next) => {
     let promise1 = new Promise((resolve, reject) => {
@@ -18,7 +43,7 @@ module.exports.showPageIndex = (req, res, next) => {
     (async () => {
         try {
             let [statistics, products] = await Promise.all([promise1, promise2]);
-            res.render('./pages/index', { statistics, products});
+            res.render('./pages/index', { statistics, products });
         } catch(err) {
             next(err);
         }
@@ -44,7 +69,4 @@ module.exports.showPageIndex = (req, res, next) => {
 
 };
 
-module.exports.sendEmail = (reg, res, next) => {
-    res.send(`sending email`);
-    console.log('sending email');
-};
+
