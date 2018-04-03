@@ -46,11 +46,15 @@ module.exports.addProduct = (req, res, next) => {
     form.parse(req, (err, fields, files) => {
        if (err) return next(err);
        if (files.photo.name === '' || files.photo.size === 0) {
-           fs.unlink(files.photo.path, (err) => console.error(err));
+           fs.unlink(files.photo.path, (err) => {
+               if (err) console.error(err);
+           });
            return res.redirect(`/admin?msgfile=Picture hasn't been attached`);
        }
        if ((!fields.name) || (!fields.price)) {
-           fs.unlink(files.photo.path, (err) => console.error(err));
+           fs.unlink(files.photo.path, (err) => {
+               if (err) console.error(err);
+           });
            return res.redirect(`/admin?msgfile=either Name or Price hasn't been inserted`);
        }
        fileName = path.join(upload, files.photo.name);

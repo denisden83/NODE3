@@ -5,13 +5,17 @@ const ctrlIndex = require('../controllers/index');
 const ctrlAdmin = require('../controllers/admin');
 const ctrlLogin = require('../controllers/login');
 
+const isAdmin = (req, res, next) => {
+  if (req.session.isAdmin) return next();
+  res.redirect('/login');
+};
 
 /*----    ROOT ------*/
 router.get('/', ctrlIndex.showPageIndex);
 router.post('/', ctrlIndex.sendEmail);
 
 /*----    PAGE ADMIN  ------*/
-router.get('/admin', ctrlAdmin.showPageAdmin);
+router.get('/admin', isAdmin, ctrlAdmin.showPageAdmin);
 router.post('/admin/upload', ctrlAdmin.addProduct);
 router.post('/admin/skills', ctrlAdmin.addStatistics);
 
