@@ -16,18 +16,15 @@ module.exports.logIn = function(req, res, next) {
         res.redirect(`/login?msglogin=Email is not valid`);
         return;
     }
-    if (password === ''){
-        res.redirect(`/login?msglogin=Insert password`);
-        return;
-    }
-    if (email === ''){
-        res.redirect(`/login?msglogin=Insert email. Default email admin@admin`);
-        return;
-    }
+    // if (password === 0){
+    //     res.redirect(`/login?msglogin=Insert password`);
+    //     return;
+    // }
+
     ModelLogIn.checkIfAdmin(email, (err, result) => {
         if (err) return next(err);
         if (!result) {
-            res.redirect(`/login?msglogin=there's no such user`);
+            res.redirect(`/login?msglogin=There's no such user. Default email admin@admin`);
             return;
         }
         if (result.password !== password) {
@@ -41,5 +38,4 @@ module.exports.logIn = function(req, res, next) {
         }
         res.redirect(`/login`);
     });
-
 };
